@@ -53,20 +53,30 @@ double mult_and_div(const char* input, double second_num){
 double parseExpression(const char* input){
   double first_num = parseNumber(input);
   double second_num;
-  char oper = input[pos];
-  if (oper == '+' || oper == '-'){
-    pos++;
-    if (input[pos] == '('){
+  while (input[pos] != '\0'){
+    char oper = input[pos];
       pos++;
-      second_num = parseExpression(input);
-    } else{
-    second_num = parseNumber(input);}
-    }
-    if (input[pos]=='*' || input[pos]=='/'){
-      second_num = mult_and_div(input, second_num);
-    }
-
-  return first_num + second_num;
+      if (input[pos] == '('){
+        pos++;
+        second_num = parseExpression(input);
+      } else{  second_num = parseNumber(input);}
+      if (input[pos]=='*' || input[pos]=='/'){
+        second_num = mult_and_div(input, second_num);
+      }
+      if (oper =='+'){
+        first_num += second_num;
+      }
+      if (oper =='-'){
+        first_num -= second_num;
+      }
+      if (oper =='*'){
+        first_num *= second_num;
+      }
+      if (oper =='/'){
+        first_num /= second_num;
+      }
+  }
+  return first_num;
 }
 
 int main(){
