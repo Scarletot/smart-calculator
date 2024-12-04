@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 short pos = 0;
 
 
@@ -63,17 +64,24 @@ double parseExpression(const char* input){
   double first_num;
   if (input[pos] == '('){
     pos++;
-    first_num = parseExpression(input);
+    if (input[pos] == '-'){
+      
+      first_num = (parseExpression(input));
+      std::cout << first_num << std::endl;
+    } else{
+    first_num = parseExpression(input);}
   } else {
 
     first_num = parseNumber(input);
   }
   if (input[pos] == '!'){
     first_num = factarial(first_num);
+    pos++;
   }
   double second_num;
   while (input[pos] != '\0'){
       char oper = input[pos];
+
       if (oper == ')'){
         pos++;
         break;
@@ -112,6 +120,7 @@ int main(){
   std::cout << "Введіть математичний віраз: ";
   std::cin >> math;
   double res =parseExpression(math);
+  std::cout << std::fixed << std::setprecision(2);
   std::cout << "Результат: " << res << std::endl;
   return 0;
   
