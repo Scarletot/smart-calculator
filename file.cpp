@@ -23,6 +23,14 @@ double parseNumber(const char* input){
 
 double parseExpression(const char* input); 
 
+long factarial(int num) {
+  int res = 1;
+  for (int i =2; i <= num; i++){
+    res *= i;
+  }
+  return res;
+}
+
 
 double mult_and_div(const char* input, double second_num){
   
@@ -35,7 +43,8 @@ double mult_and_div(const char* input, double second_num){
         next_num = parseExpression(input);
       }
       if (input[pos] == '!'){
-        break;
+        next_num = factarial(next_num);
+        pos++;
       }
       if (oper == '*') {
           second_num *= next_num;
@@ -51,10 +60,24 @@ double mult_and_div(const char* input, double second_num){
 }
 
 double parseExpression(const char* input){
-  double first_num = parseNumber(input);
+  double first_num;
+  if (input[pos] == '('){
+    pos++;
+    first_num = parseExpression(input);
+  } else {
+
+    first_num = parseNumber(input);
+  }
+  if (input[pos] == '!'){
+    first_num = factarial(first_num);
+  }
   double second_num;
   while (input[pos] != '\0'){
-    char oper = input[pos];
+      char oper = input[pos];
+      if (oper == ')'){
+        pos++;
+        break;
+      }
       pos++;
       if (input[pos] == '('){
         pos++;
@@ -62,6 +85,10 @@ double parseExpression(const char* input){
       } else{  second_num = parseNumber(input);}
       if (input[pos]=='*' || input[pos]=='/'){
         second_num = mult_and_div(input, second_num);
+      }
+      if (input[pos] == '!'){
+        second_num = factarial(second_num);
+        pos++;
       }
       if (oper =='+'){
         first_num += second_num;
