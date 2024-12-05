@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include <cstring>
 
 bool isOper(char oper) {
     return (oper == '+' || oper == '-' || oper == '*' || oper == '/' || oper == '(' || oper == ')' || oper == '!');
@@ -28,17 +27,16 @@ void toRPN(const char* exp, char* output) {
     char stack_oper[100];
     short top_oper = -1;
     short out_index = 0;
-    char num_buffer[10];
+    char num_buffer[15];
     short num_index = 0;
 
     for (int i = 0; exp[i] != '\0'; i++) {
-        if (exp[i] == ' ') {
-            continue;
-        }
 
         if (exp[i] >= '0' && exp[i] <= '9') {
             num_buffer[num_index++] = exp[i];
-        } else {
+        }else if(exp[i] == '.'){
+            num_buffer[num_index++] = exp[i];
+        }else {
             if (num_index > 0) {
                 for (int j = 0; j < num_index; j++) {
                     output[out_index++] = num_buffer[j];
@@ -90,6 +88,15 @@ double eva(const char* rpn) {
                 num = num * 10 + (rpn[i] - '0');
                 i++;
             }
+            if (rpn[i] == '.'){
+              i++;    
+              double fl = 0.1;
+              while (rpn[i] >= '0' && rpn[i] <= '9') {
+                  num = num + fl * (rpn[i] - '0');
+                  fl /=10;
+                  i++;
+              }
+            }
             stack[++top] = num;
         } else if (isOper(rpn[i])) {
             if (rpn[i] == '!'){
@@ -125,7 +132,7 @@ int main() {
     char rpn[100];
 
     std::cout << "Введіть математичний вираз: ";
-    std::cin.getline(math, 100);
+    std::cin >> math;
 
     toRPN(math, rpn);
 
